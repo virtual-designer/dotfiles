@@ -155,7 +155,13 @@
 
 ;; Name, email, signature, authinfo, etc
 (setq user-mail-address "rakinar2@onesoftnet.eu.org"
-      user-full-name "Ar Rakin")
+      user-full-name "Ar Rakin"
+      smtpmail-smtp-server "mail.onesoftnet.eu.org"
+      smtpmail-smtp-service 465
+      smtpmail-stream-type 'ssl
+      smtpmail-auth-credentials "~/.authinfo.gpg"
+      send-mail-function 'smtpmail-send-it
+      message-send-mail-function 'smtpmail-send-it)
 
 (setq add-log-full-name user-full-name)
 (setq add-log-mailing-address user-mail-address)
