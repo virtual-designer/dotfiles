@@ -21,6 +21,8 @@
 (require-install 'yasnippet)
 (require-install 'yasnippet-snippets)
 
+(setq select-enable-clipboard t)
+(setq select-enable-primary t)
 (setq display-time-day-and-date t)
 (setq fill-column 80)
 (setq column-number-indicator-zero-based nil)
@@ -191,3 +193,6 @@
 (set-face-attribute 'mode-line nil
 		    :background "#2a2a2a"
 		    :foreground "#ffffff")
+(set-face-attribute 'default nil :font "Jetbrains Mono-11")
+;; (set-cursor-color "#0050ff")
+
