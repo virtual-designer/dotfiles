@@ -54,16 +54,26 @@
 					    mode-line-remote
 					    mode-line-window-dedicated
 					    )
-					   display (min-width (2.0)))
+					   display (min-width (2.0))
+					   face (:foreground "#aaa"))
 	mode-line-frame-identification
-	mode-line-buffer-identification
+	(:proprtize mode-line-buffer-identification
+		    face (:weight bold))
 	"   "
-	mode-line-position (project-mode-line project-mode-line-format) (vc-mode vc-mode)
-	"  "
-	mode-line-modes
+	mode-line-position
+	(project-mode-line project-mode-line-format)
+	(:propertize (vc-mode vc-mode)
+		     face (:foreground "#ffa126"))
+	"    ["
+	(:propertize mode-name
+		     face (:weight bold))
+	(:propertize minor-mode-alist
+		     face (:foreground "#aaa"))
+	"]"
 	mode-line-misc-info
 	"  "
-	user-login-name))
+	(:propertize user-login-name
+		     face (:foreground "#5daafc"))))
 
 ;; Enable IDO mode
 (setq ido-enable-flex-matching t)
@@ -90,7 +100,8 @@
 
 (add-hook 'org-mode-hook
           (lambda ()
-            (setq tab-width 8)))
+            (setq tab-width 8)
+	    (local-set-key (kbd "C-e C-h") #'org-html-export-to-html)))
 
 ;; Enable ido-completing-read+
 (require-install 'ido-completing-read+)
