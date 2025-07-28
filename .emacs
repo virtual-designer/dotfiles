@@ -3,6 +3,7 @@
 ;; Require essential packages
 (add-to-list 'load-path "~/.emacs.d/lisp")
 (require 'editorconfig)
+(require 'org-remoteimg)
 
 ;; Setup package
 (require 'package)
@@ -97,6 +98,8 @@
 ;; Org mode
 (setq org-support-shift-select 1)
 (setq org-use-sub-superscripts '{})
+(setq org-display-remote-inline-images 'cache)
+(setq org-link-preview-overlays t)
 
 (add-hook 'org-mode-hook
           (lambda ()
