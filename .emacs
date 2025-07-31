@@ -2,8 +2,11 @@
 
 ;; Require essential packages
 (add-to-list 'load-path "~/.emacs.d/lisp")
+(add-to-list 'load-path "/usr/local/share/emacs/site-lisp/mu4e")
+
 (require 'editorconfig)
 (require 'org-remoteimg)
+(require 'mu4e)
 
 ;; Setup package
 (require 'package)
@@ -114,6 +117,13 @@
 (require-install 'flx-ido)
 (flx-ido-mode 1)
 
+;; mu4e
+
+(setq mu4e-bookmarks
+  '((:name "All Inbox"
+           :query "maildir:/"
+           :key ?i)))
+
 ;; Keybindings
 (add-hook 'emacs-lisp-mode-hook
           (lambda ()
@@ -137,6 +147,14 @@
        (brace-list-open . 0)
        (brace-list-close . 0)
        ))
+
+;; Disable line-number mode in certain buffers
+
+(defun disable-linenum-hook()
+  (display-line-numbers-mode 0))
+
+(add-hook 'vterm-mode-hook #'disable-linenum-hook)
+(add-hook 'compilation-mode-hook #'disable-linenum-hook)
 
 ;; Editing
 (setq require-final-newline t)
