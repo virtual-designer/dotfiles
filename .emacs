@@ -234,3 +234,6 @@
 (set-face-attribute 'default nil :font "Jetbrains Mono-11")
 ;; (set-cursor-color "#0050ff")
 
+(set-face-attribute 'variable-pitch nil
+                    :family "Inter"
+                    :height 110)
