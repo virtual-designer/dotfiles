@@ -212,7 +212,7 @@
              (nntp-open-connection-function nntp-open-ssl-stream)))
 
 ;; Theme
-(require 'doom-themes)
+(require-install 'doom-themes)
 (load-theme 'doom-material-dark t)
 
 (doom-themes-visual-bell-config)
@@ -222,6 +222,8 @@
 
 (setq doom-themes-enable-bold t)
 (setq doom-themes-enable-italic t)
+(setq doom-themes-padded-modeline t)
+
 (setq doom-themes-treemacs-theme "doom-atom")
 
 (set-face-attribute 'default nil :background "#111111")
@@ -231,9 +233,10 @@
 (set-face-attribute 'mode-line nil
 		    :background "#2a2a2a"
 		    :foreground "#ffffff")
-(set-face-attribute 'default nil :font "Jetbrains Mono-11")
-;; (set-cursor-color "#0050ff")
-
+(set-face-attribute 'default nil :family "CommitMono Nerd Font" :height 130)
 (set-face-attribute 'variable-pitch nil
                     :family "Inter"
                     :height 110)
+
+(set-cursor-color "#007bff")
+
