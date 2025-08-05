@@ -1,6 +1,6 @@
 #!/bin/sh
 
-files=".bashrc .emacs .gitconfig .mailrc .signature .zilerc"
+files=".bashrc .emacs .gitconfig .mailrc .signature .zilerc .zshrc"
 
 for file in $files; do
     if ! test -f "$HOME/$file"; then
