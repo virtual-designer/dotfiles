@@ -154,7 +154,6 @@
   (display-line-numbers-mode 0))
 
 (add-hook 'vterm-mode-hook #'disable-linenum-hook)
-(add-hook 'compilation-mode-hook #'disable-linenum-hook)
 
 ;; Editing
 (setq require-final-newline t)
@@ -162,7 +161,8 @@
 ;; Use GGtags
 (defun c-mode-hook-handler()
   (ggtags-mode 1)
-  (display-fill-column-indicator-mode 1))
+  (display-fill-column-indicator-mode 1)
+  (auto-fill-mode 1))
 
 (add-hook 'c-mode-common-hook
           (lambda ()
