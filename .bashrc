@@ -93,3 +93,5 @@ case ":$PATH:" in
 esac
 # pnpm end
 
+alias et="emacsclient -t"
+alias ec="emacsclient -c"

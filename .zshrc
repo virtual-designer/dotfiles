@@ -32,6 +32,7 @@ if [[ ! -t 1 ]]; then
 fi
 
 autoload -Uz vcs_info
+zstyle ':vcs_info:git:*' formats "${bold}${blue}git:(${red}%b${blue})${reset}${reset} "
 
 function precmd {
     vcs_info
@@ -45,10 +46,7 @@ function arrow_color {
     fi
 }
 
-zstyle ':vcs_info:git:*' formats "${bold}${blue}git:(${red}%b${blue})${reset}${reset} "
-
 setopt prompt_subst
-
 PROMPT='${bold}$(arrow_color)➜${reset}${reset} ${bold}${blue}%n@%m${reset}${reset} ${dimed}${gray}%~${reset}${reset} ${vcs_info_msg_0_}${reset}${reset}${bold}%#${reset} '
 
 # go
@@ -77,4 +75,7 @@ case ":$PATH:" in
   *) export PATH="$PNPM_HOME:$PATH" ;;
 esac
 # pnpm end
+
+alias et="emacsclient -t"
+alias ec="emacsclient -c"
 
