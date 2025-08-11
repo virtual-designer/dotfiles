@@ -89,10 +89,10 @@
 ;; multiple-cursors
 (require-install 'multiple-cursors)
 
-(global-set-key (kbd "C-c C-<down>") 'mc/mark-next-lines)
-(global-set-key (kbd "C-c C-<up>") 'mc/mark-previous-lines)
-(global-set-key (kbd "C->") 'mc/mark-next-like-this)
-(global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
+(global-set-key (kbd "C-c C-<down>") 'mc/mark-next-like-this)
+(global-set-key (kbd "C-c C-<up>") 'mc/mark-previous-like-this)
+(global-set-key (kbd "C->") 'mc/mark-next-lines)
+(global-set-key (kbd "C-<") 'mc/mark-previous-lines)
 (global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
 
 ;; Projectile
@@ -226,7 +226,7 @@
 
 (setq doom-themes-treemacs-theme "doom-atom")
 
-(set-face-attribute 'default nil :background "#111111")
+(set-face-attribute 'default nil :background "#101010")
 (set-face-attribute 'mode-line-inactive nil
 		    :background "#202020"
 		    :foreground "#888888")
@@ -238,5 +238,11 @@
                     :family "Inter"
                     :height 110)
 
-(set-cursor-color "#007bff")
+(set-face-attribute 'cursor nil :background "#007bff")
+(add-to-list 'default-frame-alist '(cursor-color . "#007bff"))
+
+(defun new-frame-handler (new-frame)
+  (modify-frame-parameters new-frame '((cursor-color . "#007bff"))))
+
+(add-hook 'after-make-frame-functions #'new-frame-handler)
 
