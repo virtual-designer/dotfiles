@@ -4,21 +4,26 @@
 (add-to-list 'load-path "~/.emacs.d/lisp")
 (add-to-list 'load-path "/usr/local/share/emacs/site-lisp/mu4e")
 
-(require 'editorconfig)
-(require 'org-remoteimg)
-(require 'mu4e)
-
 ;; Setup package
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 (add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
 (package-initialize)
 
+(defvar package-refreshed-contents t
+  "Whether package-refresh-contents was called")
+
 (defun require-install (package)
   (unless (package-installed-p package)
-    (package-refresh-contents)
+    (unless package-refreshed-contents
+      (package-refresh-contents)
+      (setq package-refreshed-contents t))
     (package-install package))
   (require package))
+
+(require 'editorconfig)
+(require 'org-remoteimg)
+(require 'mu4e)
 
 ;; Common setup
 (require-install 'company)
