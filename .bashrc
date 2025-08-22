@@ -95,3 +95,8 @@ esac
 
 alias et="emacsclient -t"
 alias ec="emacsclient -c"
+
+alias ls='ls --color'
+alias grep='grep --color'
+
+export EDITOR='nano'
