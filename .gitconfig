@@ -1,5 +1,5 @@
 [user]
-	email = rakinar2@onesoftnet.eu.org
+	email = rakinar2@osndevs.org
 	name = Ar Rakin
 	signingkey = F8AB360594E15BED
 [commit]
@@ -8,3 +8,5 @@
 	rebase = false
 [init]
 	defaultBranch = main
+[push]
+	gpgSign = if-asked
