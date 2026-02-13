@@ -24,8 +24,6 @@ if [ -d ~/.bashrc.d ]; then
 fi
 unset rc
 
-export PATH="$PATH:/usr/local/go/bin"
-
 # fnm
 FNM_PATH="/home/rakinar2/.local/share/fnm"
 if [ -d "$FNM_PATH" ]; then
@@ -100,3 +98,5 @@ alias ls='ls --color'
 alias grep='grep --color'
 
 export EDITOR='nano'
+export CVSROOT=:ext:rakinar2@ssh.osndevs.org:/srv/cvsrepo
+export CVS_RSH=ssh

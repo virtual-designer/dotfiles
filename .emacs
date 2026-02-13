@@ -30,6 +30,7 @@
 (require-install 'yasnippet)
 (require-install 'yasnippet-snippets)
 
+(setq vc-make-backup-files nil)
 (setq select-enable-clipboard t)
 (setq select-enable-primary t)
 (setq display-time-day-and-date t)
@@ -38,6 +39,7 @@
 (setq make-backup-files nil)
 (setq display-time-default-load-average nil)
 (setq display-time-format "   %b %d %H:%M:%S")
+(setq require-final-newline t)
 (setq custom-file "~/.emacs.d/custom.el")
 (load-file custom-file)
 
@@ -138,7 +140,55 @@
 (global-set-key (kbd "C-c C-m") #'recompile)
 
 ;; Indentation
-(setq-default indent-tabs-mode 1)
+(setq-default indent-tabs-mode t)
+(setq-default tab-stop-list nil)
+(setq-default tab-width 4)
+
+(setq indent-tabs-mode t)
+(setq tab-stop-list nil)
+(setq tab-width 4)
+
+(defun insert-tab-or-indent-region ()
+  (interactive)
+  (if (use-region-p)
+      (indent-rigidly (region-beginning) (region-end) tab-width)
+    (insert "\t")))
+
+(defun unindent-region-or-tab ()
+  (interactive)
+  (if (use-region-p)
+      (indent-rigidly (region-beginning) (region-end) (- tab-width))
+    (let ((pos (point)))
+      (if (and (> pos (point-min))
+               (eq (char-before) ?\t))
+          (delete-char -1)
+        (backward-delete-char-untabify 1)))))
+
+(defun newline-and-copy-indent ()
+  "Insert a newline and copy indentation (tabs or spaces) from previous line."
+  (interactive)
+  (let ((indent (save-excursion
+                  (back-to-indentation)
+                  (buffer-substring (line-beginning-position) (point)))))
+    (newline)
+    (insert indent)))
+
+(define-minor-mode literal-tabs-mode
+  "Literal tabs mode"
+  :global t
+  :lighter " LT"
+  :interactive t
+  (if literal-tabs-mode
+      (progn
+        (setq indent-tabs-mode t)
+        (global-set-key (kbd "TAB") 'insert-tab-or-indent-region)
+        (global-set-key (kbd "<backtab>") 'unindent-region-or-tab)
+		(global-set-key (kbd "RET") 'newline-and-copy-indent))
+    (global-unset-key (kbd "TAB"))
+    (global-unset-key (kbd "<backtab>"))
+	(global-unset-key (kbd "RET"))))
+
+(literal-tabs-mode 1)
 
 ;; C mode setup
 (setq c-default-style "gnu"
@@ -152,6 +202,19 @@
        (brace-list-open . 0)
        (brace-list-close . 0)
        ))
+
+;; Perl
+(add-to-list 'auto-mode-alist '("\\.pl\\'" . cperl-mode))
+(add-to-list 'auto-mode-alist '("\\.pm\\'" . cperl-mode))
+
+;; Configure cperl-mode indentation
+(add-hook 'cperl-mode-hook
+          (lambda ()
+            (setq cperl-indent-level 4)  ;; block indent offset
+            (setq cperl-continued-statement-offset 1) ; continuation lines
+            (setq cperl-close-paren-offset -1)       ; closing parens
+            (setq cperl-brace-offset 0)
+            (setq cperl-label-offset -1)))
 
 ;; Disable line-number mode in certain buffers
 
@@ -238,7 +301,8 @@
 (set-face-attribute 'mode-line nil
 		    :background "#2a2a2a"
 		    :foreground "#ffffff")
-(set-face-attribute 'default nil :family "CommitMono Nerd Font" :height 130)
+;;(set-face-attribute 'default nil :family "CommitMono Nerd Font" :height 130)
+(set-face-attribute 'default nil :family "JetBrainsMono NFP" :height 110)
 (set-face-attribute 'variable-pitch nil
                     :family "Inter"
                     :height 110)

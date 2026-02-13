@@ -10,3 +10,4 @@
 	defaultBranch = main
 [push]
 	gpgSign = if-asked
+	certSign = true
