@@ -24,6 +24,16 @@ if [ -d ~/.bashrc.d ]; then
 fi
 unset rc
 
+DETECTED_OS="$(uname)"
+
+if [ "$DETECTED_OS" = "FreeBSD" ]; then
+  arrow_success_color="\e[1;38m"
+  arrow_error_color="\e[1;31m"
+else
+  arrow_success_color="\e[1;36m"
+  arrow_error_color="\e[1;31m"
+fi
+
 # fnm
 FNM_PATH="/home/rakinar2/.local/share/fnm"
 if [ -d "$FNM_PATH" ]; then
@@ -68,9 +78,9 @@ git_status_end() {
 
 arrow_color() {
   if [ $? -eq 0 ]; then
-    echo -e "\e[1;36m"
+    echo -e "$arrow_success_color"
   else
-    echo -e "\e[1;31m"
+    echo -e "$arrow_error_color"
   fi
 }
 
@@ -80,8 +90,11 @@ else
   PROMPT_COMMAND="git_branch_parse;"
 fi
 
-PS1='\[$(arrow_color)\]➜\[\e[0m\] \[\e[1;34m\]\u@\H\[\e[0m\e[2;37m\] \[\e[0m\e[2;37m\]\w\[\e[0m\e[1m\e[34m\]$(git_status_start)\[\e[1;31m\]$(git_branch)\[\e[1;34m\]$(git_status_end) \[\e[0m\e[1m\]$\[\e[0m\] '
-
+if [ "$DETECTED_OS" = "FreeBSD" ]; then
+  PS1='\[$(arrow_color)\]➜\[\e[0m\] \[\e[2;31m\]\u@\H\[\e[0m\e[2;37m\] \[\e[0m\e[2;37m\]\w\[\e[0m\e[2m\e[31m\]$(git_status_start)\[\e[1;34m\]$(git_branch)\[\e[2;31m\]$(git_status_end) \[\e[0m\e[1m\]$\[\e[0m\] '
+else
+  PS1='\[$(arrow_color)\]➜\[\e[0m\] \[\e[1;34m\]\u@\H\[\e[0m\e[2;37m\] \[\e[0m\e[2;37m\]\w\[\e[0m\e[1m\e[34m\]$(git_status_start)\[\e[1;31m\]$(git_branch)\[\e[1;34m\]$(git_status_end) \[\e[0m\e[1m\]$\[\e[0m\] '
+fi
 
 # pnpm
 export PNPM_HOME="/home/rakinar2/.local/share/pnpm"

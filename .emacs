@@ -1,9 +1,7 @@
 (setq-default image-scaling-factor 1)
-
 ;; Require essential packages
 (add-to-list 'load-path "~/.emacs.d/lisp")
 (add-to-list 'load-path "/usr/local/share/emacs/site-lisp/mu4e")
-
 ;; Setup package
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
@@ -21,10 +19,17 @@
     (package-install package))
   (require package))
 
-(require 'editorconfig)
-(require 'org-remoteimg)
-(require 'mu4e)
+(require-install 'editorconfig)
 
+(condition-case err
+    (require 'org-remoteimg)
+  (error
+   (message "Failed to load org-remoteimg: %s" err)))
+
+(condition-case err
+    (require 'mu4e)
+  (error
+   (message "Failed to load mu4e: %s" err)))
 ;; Common setup
 (require-install 'company)
 (require-install 'yasnippet)
@@ -254,9 +259,9 @@
 (add-hook 'after-init-hook #'action-if-discord-canary-running)
 
 ;; Name, email, signature, authinfo, etc
-(setq user-mail-address "rakinar2@onesoftnet.eu.org"
+(setq user-mail-address "rakinar2@osndevs.org"
       user-full-name "Ar Rakin"
-      smtpmail-smtp-server "mail.onesoftnet.eu.org"
+      smtpmail-smtp-server "mail.osndevs.org"
       smtpmail-smtp-service 465
       smtpmail-stream-type 'ssl
       smtpmail-auth-credentials "~/.authinfo.gpg"
