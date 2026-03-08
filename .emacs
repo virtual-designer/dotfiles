@@ -46,6 +46,7 @@
 (setq display-time-format "   %b %d %H:%M:%S")
 (setq require-final-newline t)
 (setq custom-file "~/.emacs.d/custom.el")
+
 (load-file custom-file)
 
 (menu-bar-mode 0)
@@ -145,53 +146,76 @@
 (global-set-key (kbd "C-c C-m") #'recompile)
 
 ;; Indentation
-(setq-default indent-tabs-mode t)
+(setq-default indent-tabs-mode nil)
 (setq-default tab-stop-list nil)
 (setq-default tab-width 4)
+(setq-default standard-indent 4)
 
-(setq indent-tabs-mode t)
+(setq indent-tabs-mode nil)
 (setq tab-stop-list nil)
 (setq tab-width 4)
 
-(defun insert-tab-or-indent-region ()
-  (interactive)
-  (if (use-region-p)
-      (indent-rigidly (region-beginning) (region-end) tab-width)
-    (insert "\t")))
+(defvar literal-tabs-mode-map (make-sparse-keymap)
+  "Keymap for literal-tabs-mode.")
 
-(defun unindent-region-or-tab ()
+(defun literal-tabs--insert-tab ()
   (interactive)
-  (if (use-region-p)
-      (indent-rigidly (region-beginning) (region-end) (- tab-width))
-    (let ((pos (point)))
-      (if (and (> pos (point-min))
-               (eq (char-before) ?\t))
-          (delete-char -1)
-        (backward-delete-char-untabify 1)))))
+  (let ((width (if (boundp 'tab-width) tab-width 4)))
+    (if (use-region-p)
+        ;; region selected → indent all lines
+        (let ((start (region-beginning))
+              (end (region-end)))
+          (save-excursion
+            (goto-char start)
+            (while (< (point) end)
+              (beginning-of-line)
+              (literal-tabs--insert-tab-line width)
+              (forward-line 1))))
+      ;; no selection → single line
+      (literal-tabs--insert-tab-line width))))
 
-(defun newline-and-copy-indent ()
-  "Insert a newline and copy indentation (tabs or spaces) from previous line."
+(defun literal-tabs--insert-tab-line (width)
+  (if indent-tabs-mode
+      (insert "\t")
+    ;; spaces up to next tab stop
+    (let* ((col (current-column))
+           (spaces (- width (% col width))))
+      (insert (make-string spaces ?\s)))))
+
+(defun literal-tabs--backtab ()
+  "Outdent current line(s) by `tab-width`, like VSCode Shift-TAB."
   (interactive)
-  (let ((indent (save-excursion
-                  (back-to-indentation)
-                  (buffer-substring (line-beginning-position) (point)))))
-    (newline)
-    (insert indent)))
+  (let ((width (if (boundp 'tab-width) tab-width 4)))
+    (if (use-region-p)
+        ;; region selected → outdent all lines
+        (let ((start (region-beginning))
+              (end (region-end)))
+          (save-excursion
+            (goto-char start)
+            (while (< (point) end)
+              (beginning-of-line)
+              (literal-tabs--backtab-line width)
+              (forward-line 1))))
+      ;; single line
+      (literal-tabs--backtab-line width))))
+
+(defun literal-tabs--backtab-line (width)
+  "Outdent current line by up to WIDTH spaces or one tab."
+  (let ((col (current-column)))
+    (let ((remove (min width col)))
+      (save-excursion
+        (move-to-column 0)
+        (delete-char remove)))))
+
+;; Bind keys
+(define-key literal-tabs-mode-map (kbd "TAB") 'literal-tabs--insert-tab)
+(define-key literal-tabs-mode-map (kbd "<backtab>") 'literal-tabs--backtab)
 
 (define-minor-mode literal-tabs-mode
-  "Literal tabs mode"
-  :global t
+  "Literal labs mode"
   :lighter " LT"
-  :interactive t
-  (if literal-tabs-mode
-      (progn
-        (setq indent-tabs-mode t)
-        (global-set-key (kbd "TAB") 'insert-tab-or-indent-region)
-        (global-set-key (kbd "<backtab>") 'unindent-region-or-tab)
-		(global-set-key (kbd "RET") 'newline-and-copy-indent))
-    (global-unset-key (kbd "TAB"))
-    (global-unset-key (kbd "<backtab>"))
-	(global-unset-key (kbd "RET"))))
+  :global t
+  :keymap literal-tabs-mode-map)
 
 (literal-tabs-mode 1)
 
@@ -221,8 +245,15 @@
             (setq cperl-brace-offset 0)
             (setq cperl-label-offset -1)))
 
-;; Disable line-number mode in certain buffers
+;; Other modes
+(defun enable-tabs-mode-hook()
+  (setq indent-tabs-mode t))
+  
+(setq tabs-mode-enabled-modes '("makefile" "makefile-automake"))
+(dolist (mode tabs-mode-enabled-modes)
+	(add-hook (intern (concat mode "-mode-hook")) #'enable-tabs-mode-hook))
 
+;; Disable line-number mode in certain buffers
 (defun disable-linenum-hook()
   (display-line-numbers-mode 0))
 
@@ -246,17 +277,6 @@
 (require-install 'elcord)
 (setq elcord--editor-name "GNU Emacs")
 (setq elcord-client-id "1398326663602901162")
-
-(defun discord-canary-running-p ()
-  (let ((output (shell-command-to-string "ps aux | grep discord-canary")))
-    (not (string-empty-p output))))
-
-(defun action-if-discord-canary-running ()
-  (when (discord-canary-running-p)
-    (message "Discord Canary is running!")
-    (elcord-mode 1)))
-
-(add-hook 'after-init-hook #'action-if-discord-canary-running)
 
 ;; Name, email, signature, authinfo, etc
 (setq user-mail-address "rakinar2@osndevs.org"

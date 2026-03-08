@@ -91,7 +91,7 @@ else
 fi
 
 if [ "$DETECTED_OS" = "FreeBSD" ]; then
-  PS1='\[$(arrow_color)\]➜\[\e[0m\] \[\e[2;31m\]\u@\H\[\e[0m\e[2;37m\] \[\e[0m\e[2;37m\]\w\[\e[0m\e[2m\e[31m\]$(git_status_start)\[\e[1;34m\]$(git_branch)\[\e[2;31m\]$(git_status_end) \[\e[0m\e[1m\]$\[\e[0m\] '
+  PS1='\[$(arrow_color)\]➜\[\e[0m\] \[\e[1;31m\]\u@\H\[\e[0m\e[2;37m\] \[\e[0m\e[2;37m\]\w\[\e[0m\e[1m\e[31m\]$(git_status_start)\[\e[1;34m\]$(git_branch)\[\e[1;31m\]$(git_status_end) \[\e[0m\e[1m\]$\[\e[0m\] '
 else
   PS1='\[$(arrow_color)\]➜\[\e[0m\] \[\e[1;34m\]\u@\H\[\e[0m\e[2;37m\] \[\e[0m\e[2;37m\]\w\[\e[0m\e[1m\e[34m\]$(git_status_start)\[\e[1;31m\]$(git_branch)\[\e[1;34m\]$(git_status_end) \[\e[0m\e[1m\]$\[\e[0m\] '
 fi
@@ -113,3 +113,19 @@ alias grep='grep --color'
 export EDITOR='nano'
 export CVSROOT=:ext:rakinar2@ssh.osndevs.org:/srv/cvsrepo
 export CVS_RSH=ssh
+
+if [ "$DETECTED_OS" = "FreeBSD" ]; then
+  # Start SSH agent
+  if ! pgrep -u "$USER" ssh-agent > /dev/null; then
+    eval "$(ssh-agent -s)" > /dev/null
+  fi
+
+  # Start GPG agent
+  export GPG_TTY="$(tty)"
+
+  if ! pgrep -u "$USER" gpg-agent > /dev/null; then
+    gpgconf --launch gpg-agent
+  fi
+fi
+
+
