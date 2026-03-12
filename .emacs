@@ -1,7 +1,7 @@
-(setq-default image-scaling-factor 1)
 ;; Require essential packages
 (add-to-list 'load-path "~/.emacs.d/lisp")
 (add-to-list 'load-path "/usr/local/share/emacs/site-lisp/mu4e")
+
 ;; Setup package
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
@@ -42,10 +42,11 @@
 (setq fill-column 80)
 (setq column-number-indicator-zero-based nil)
 (setq make-backup-files nil)
-(setq display-time-default-load-average nil)
-(setq display-time-format "   %b %d %H:%M:%S")
+(setq display-time-format "   %a, %b %d %H:%M:%S")
 (setq require-final-newline t)
 (setq custom-file "~/.emacs.d/custom.el")
+(setq image-scaling-factor 1)
+(setq-default image-scaling-factor 1)
 
 (load-file custom-file)
 
@@ -79,6 +80,7 @@
 	"   "
 	mode-line-position
 	(project-mode-line project-mode-line-format)
+	""
 	(:propertize (vc-mode vc-mode)
 		     face (:foreground "#ffa126"))
 	"    ["
@@ -87,9 +89,10 @@
 	(:propertize minor-mode-alist
 		     face (:foreground "#aaa"))
 	"]"
-	mode-line-misc-info
+	(:propertize ("" mode-line-misc-info)
+	         face (:foreground "#ddd"))
 	"  "
-	(:propertize user-login-name
+	(:propertize ("" user-login-name "@" system-name)
 		     face (:foreground "#5daafc"))))
 
 ;; Enable IDO mode
@@ -106,7 +109,7 @@
 (global-set-key (kbd "C-c C-<up>") 'mc/mark-previous-like-this)
 (global-set-key (kbd "C->") 'mc/mark-next-lines)
 (global-set-key (kbd "C-<") 'mc/mark-previous-lines)
-(global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
+(global-set-key (kbd "C-c C-d") 'mc/mark-all-like-this)
 
 ;; Projectile
 (setq projectile-mode-line "Projectile")
@@ -144,6 +147,7 @@
 (global-set-key (kbd "C-c d") #'duplicate-line)
 (global-set-key (kbd "C-c m") #'compile)
 (global-set-key (kbd "C-c C-m") #'recompile)
+(global-set-key (kbd "C-c C-a") #'mark-whole-buffer)
 
 ;; Indentation
 (setq-default indent-tabs-mode nil)
@@ -240,13 +244,16 @@
 (add-hook 'cperl-mode-hook
           (lambda ()
             (setq cperl-indent-level 4)  ;; block indent offset
-            (setq cperl-continued-statement-offset 1) ; continuation lines
-            (setq cperl-close-paren-offset -1)       ; closing parens
+            (setq cperl-continued-statement-offset 4) ; continuation lines
+            (setq cperl-close-paren-offset -4)       ; closing parens
             (setq cperl-brace-offset 0)
-            (setq cperl-label-offset -1)))
+            (setq cperl-label-offset -1)
+            (setq cperl-indent-parens-as-block t)
+            (setq cperl-tab-always-indent t)
+            (setq indent-tabs-mode nil)))
 
 ;; Other modes
-(defun enable-tabs-mode-hook()
+(defun enable-tabs-mode-hook ()
   (setq indent-tabs-mode t))
   
 (setq tabs-mode-enabled-modes '("makefile" "makefile-automake"))
@@ -254,7 +261,7 @@
 	(add-hook (intern (concat mode "-mode-hook")) #'enable-tabs-mode-hook))
 
 ;; Disable line-number mode in certain buffers
-(defun disable-linenum-hook()
+(defun disable-linenum-hook ()
   (display-line-numbers-mode 0))
 
 (add-hook 'vterm-mode-hook #'disable-linenum-hook)
@@ -326,7 +333,7 @@
 (set-face-attribute 'mode-line nil
 		    :background "#2a2a2a"
 		    :foreground "#ffffff")
-;;(set-face-attribute 'default nil :family "CommitMono Nerd Font" :height 130)
+
 (set-face-attribute 'default nil :family "JetBrainsMono NFP" :height 110)
 (set-face-attribute 'variable-pitch nil
                     :family "Inter"
