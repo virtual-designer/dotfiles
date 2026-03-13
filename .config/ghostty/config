@@ -61,9 +61,8 @@ shell-integration = none
 window-theme = ghostty
 
 font-family = ""
-# font-family = "CommitMono Nerd Font Propo"
-font-family = "JetBrainsMono Nerd Font Propo"
-font-size = 11
+font-family = "JetBrainsMono NFP"
+font-size = 11.5
 font-feature = -calt, -liga, -dlig
 
 term = xterm-256color
