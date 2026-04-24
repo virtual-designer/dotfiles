@@ -93,7 +93,7 @@ fi
 if [ "$DETECTED_OS" = "FreeBSD" ]; then
   PS1='\[$(arrow_color)\]➜\[\e[0m\] \[\e[1;31m\]\u@\H\[\e[0m\e[2;37m\] \[\e[0m\e[2;37m\]\w\[\e[0m\e[1m\e[31m\]$(git_status_start)\[\e[1;34m\]$(git_branch)\[\e[1;31m\]$(git_status_end) \[\e[0m\e[1m\]$\[\e[0m\] '
 else
-  PS1='\[$(arrow_color)\]➜\[\e[0m\] \[\e[1;34m\]\u@\H\[\e[0m\e[2;37m\] \[\e[0m\e[2;37m\]\w\[\e[0m\e[1m\e[34m\]$(git_status_start)\[\e[1;31m\]$(git_branch)\[\e[1;34m\]$(git_status_end) \[\e[0m\e[1m\]$\[\e[0m\] '
+  PS1='\[$(arrow_color)\]➜\[\e[0m\] \[\e[0;34m\]\u@\H\[\e[0m\e[0;37m\] \[\e[0m\e[2;37m\]\w\[\e[0m\e[0m\e[34m\]$(git_status_start)\[\e[1;31m\]$(git_branch)\[\e[0;34m\]$(git_status_end) \[\e[0m\e[1m\]$\[\e[0m\] '
 fi
 
 # pnpm

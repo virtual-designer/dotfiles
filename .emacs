@@ -133,6 +133,9 @@
 (require-install 'flx-ido)
 (flx-ido-mode 1)
 
+;; File local variables
+(setq enable-local-variables :safe)
+
 ;; mu4e
 
 (setq mu4e-bookmarks
@@ -218,10 +221,7 @@
 (define-minor-mode literal-tabs-mode
   "Literal labs mode"
   :lighter " LT"
-  :global t
   :keymap literal-tabs-mode-map)
-
-(literal-tabs-mode 1)
 
 ;; C mode setup
 (setq c-default-style "gnu"
@@ -254,12 +254,19 @@
 
 ;; Other modes
 (defun enable-tabs-mode-hook ()
-  (setq indent-tabs-mode t))
-  
-(setq tabs-mode-enabled-modes '("makefile" "makefile-automake"))
+   (setq indent-tabs-mode t)
+   (setq-local indent-tabs-mode t)
+   (literal-tabs-mode 1))
+
+(defun enable-spaces-mode-hook ()
+   (literal-tabs-mode 1))
+
+(setq tabs-mode-enabled-modes '("makefile" "makefile-gmake" "makefile-bmake" "makefile-automake"))
 (dolist (mode tabs-mode-enabled-modes)
 	(add-hook (intern (concat mode "-mode-hook")) #'enable-tabs-mode-hook))
 
+(add-hook 'prog-mode-hook #'enable-spaces-mode-hook)
+          
 ;; Disable line-number mode in certain buffers
 (defun disable-linenum-hook ()
   (display-line-numbers-mode 0))
