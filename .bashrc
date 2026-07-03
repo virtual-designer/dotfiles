@@ -45,6 +45,10 @@ fi
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 
+# JDK
+export JAVA_HOME="/usr/share/jdk/26.0.1"
+export PATH="$JAVA_HOME/bin:$PATH"
+
 # code
 if [ -z "$(command -v code)" ]; then
   alias code="code-insiders"
@@ -87,7 +91,7 @@ arrow_color() {
 if [ -n "$PROMPT_COMMAND" ]; then
   PROMPT_COMMAND="$PROMPT_COMMAND; git_branch_parse"
 else
-  PROMPT_COMMAND="git_branch_parse;"
+  PROMPT_COMMAND="git_branch_parse"
 fi
 
 if [ "$DETECTED_OS" = "FreeBSD" ]; then

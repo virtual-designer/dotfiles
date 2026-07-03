@@ -55,7 +55,6 @@ keybind = ctrl+x>3=new_split:up
 theme = "Paul Millr"
 background = #000
 # background-opacity = 0.7
-bold-is-bright = true
 cursor-style = block
 cursor-color = #ddd
 shell-integration = none
