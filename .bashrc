@@ -103,8 +103,8 @@ fi
 # pnpm
 export PNPM_HOME="/home/rakinar2/.local/share/pnpm"
 case ":$PATH:" in
-  *":$PNPM_HOME:"*) ;;
-  *) export PATH="$PNPM_HOME:$PATH" ;;
+  *":$PNPM_HOME/bin:"*) ;;
+  *) export PATH="$PNPM_HOME/bin:$PATH" ;;
 esac
 # pnpm end
 
@@ -131,5 +131,4 @@ if [ "$DETECTED_OS" = "FreeBSD" ]; then
     gpgconf --launch gpg-agent
   fi
 fi
-
 
